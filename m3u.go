@@ -11,6 +11,8 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/dimchansky/utfbom"
 )
 
 // Playlist is a type that represents an m3u playlist containing 0 or more tracks
@@ -50,7 +52,7 @@ func Parse(fileName string) (playlist Playlist, err error) {
 	defer f.Close()
 
 	onFirstLine := true
-	scanner := bufio.NewScanner(f)
+	scanner := bufio.NewScanner(utfbom.SkipOnly(f))
 	tagsRegExp, _ := regexp.Compile("([a-zA-Z0-9-]+?)=\"([^\"]+)\"")
 
 	for scanner.Scan() {
