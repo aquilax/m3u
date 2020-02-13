@@ -40,6 +40,10 @@ func Parse(fileName string) (playlist Playlist, err error) {
 	var data *http.Response
 	if strings.HasPrefix(fileName, "http://") || strings.HasPrefix(fileName, "https://") {
 		data, err = http.Get(fileName)
+		if err != nil {			
+			err = errors.New("Unable to open playlist file")
+			return
+		}
 		f = data.Body
 	} else {
 		f, err = os.Open(fileName)
